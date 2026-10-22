@@ -13,13 +13,14 @@ export default function Produtos() {
 
   useEffect(() => {
     //Simulando a requisição para o backend
+
     const carregaProdutos = async () => {
       try {
         const resposta = await fetch(API_URL);
 
         if (!resposta.ok) {
           throw new Error(
-            `Erro na listagem de produtos: ${resposta.status} ${resposta.statusText}`
+            `Erro na listagem de produtos: ${resposta.status} - ${resposta.statusText}`,
           );
         }
 
@@ -29,7 +30,6 @@ export default function Produtos() {
         if (status === "error") {
           throw new Error(`Erro na listagem de produtos: ${status}`);
         }
-        
         console.log(data);
         setProdutos(data);
       } catch (error) {
@@ -40,11 +40,9 @@ export default function Produtos() {
     carregaProdutos();
   }, []);
 
-  const handleDelete = async (id: string, e: React.MouseEvent) => {
-    e.preventDefault(); // Impede o recarregamento e o salto da página
-
+  const handleDelete = async (id: string) => {
     const confirmou: boolean = window.confirm(
-      "Deseja realmente excluir este produto?"
+      "Deseja realmente excluir este produto?",
     );
 
     if (!confirmou) {
@@ -65,7 +63,7 @@ export default function Produtos() {
 
       if (!response.ok) {
         throw new Error(
-          `A exclusão falhou: ${response.status} ${response.statusText}`
+          `A exclusão falhou: ${response.status} - ${response.statusText}`,
         );
       }
 
@@ -77,10 +75,9 @@ export default function Produtos() {
 
       //MSG de SUCESSO
       alert("O produto foi excluído com sucesso!");
-      
       //Recarregar a lista de produtos após a exclusão, utilizando o filtro para remover o produto excluído do estado
       setProdutos((prevProdutos) =>
-        prevProdutos.filter((produto) => produto.id.toString() !== id)
+        prevProdutos.filter((produto) => produto.id.toString() !== id),
       );
     } catch (error) {
       console.error(error);
@@ -88,16 +85,16 @@ export default function Produtos() {
   };
 
   return (
-    <main style={{ padding: "20px" }}>
-      <h2>Produtos</h2>
+    <main className="pagina produtos">
+      <div className="titulo-pagina">
+        <p>Gerenciamento</p>
+        <h2>Produtos cadastrados</h2>
+      </div>
 
-      <table
-        border={1}
-        cellPadding={10}
-        style={{ width: "100%", borderCollapse: "collapse" }}
-      >
+    <div className="painel tabela-responsiva">
+      <table className="tbProduto">
         <thead>
-          <tr style={{ backgroundColor: "#2c3e50", color: "#ffffff" }}>
+          <tr>
             <th>ID</th>
             <th>Nome</th>
             <th>Preço</th>
@@ -111,20 +108,14 @@ export default function Produtos() {
             <tr key={p.id}>
               <td>{p.id}</td>
               <td>{p.nome}</td>
-              <td>{p.preco}</td>
-              <td>{p.estoque}</td>
+              <td>{Number(p.preco).toLocaleString("pt-BR",{style: "currency", currency:"BRL"})}</td>
+              <td><span className="estoque">{p.estoque}</span></td>
               <td>
-                <img
-                  src={p.avatar}
-                  alt={p.nome}
-                  width={60}
-                  height={60}
-                  style={{ objectFit: "cover" }}
-                />
+                <img src={p.avatar} alt={p.nome} />
               </td>
-              <td>
-                <Link to={`/editar-produtos/${p.id}`}>Editar</Link> |{" "}
-                <Link to="#" onClick={(e) => handleDelete(p.id.toString(), e)}>
+              <td className="acoes">
+                <Link className="editar" aria-label={`Editar ${p.nome}`} to={`/editar-produtos/${p.id}`}>Editar</Link> |{" "}
+                <Link to="#" onClick={() => handleDelete(p.id.toString())}>
                   Excluir
                 </Link>
               </td>
@@ -137,6 +128,8 @@ export default function Produtos() {
           </tr>
         </tfoot>
       </table>
+    </div>
+
     </main>
   );
 }

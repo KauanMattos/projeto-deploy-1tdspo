@@ -1,23 +1,30 @@
 @import "tailwindcss";
- 
+
+
 @layer base {
- 
-    body{
-        @apply bg-gray-900 text-white w-screen;
-    }
- 
-    .container{
-    @apply bg-gray-900 text-white flex flex-col min-w-screen w-screen h-screen justify-between;
-   
-    & header{
-        @apply bg-gray-700 w-full;
-    }
-    & main{
-        @apply bg-gray-500;
-    }
-    & footer{
-        @apply bg-gray-800;
-    }
-    }
+  
+     *{
+          box-sizing:border-box;
+     }
+
+     body{
+          @apply m-0 min-w-80 font-sans;
+     }
+
+     buttons,input{
+          font:inherit;
+     }
 }
- 
+
+@layer components{
+     .container{
+          @apply flex min-h-screen min-w-screen flex-col;
+          @apply bg-slate-100 text-slate-900;
+          @apply transition-colors duration-300;
+
+     }
+
+     .container.dark{
+          @apply bg-slate-950 text-slate-100;
+     }
+}

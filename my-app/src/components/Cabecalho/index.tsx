@@ -1,16 +1,34 @@
 import { useContext } from "react";
 import Menu from "../Menu/Menu";
-import { NomeLojaContext } from "../../contexts/nomelojaContext";
-
+import { FaMoon, FaSun } from "react-icons/fa";
+import { TemaContext } from "../../contexts/TemaContext";
 
 export default function Cabecalho() {
 
-  const nomeLoja = useContext(NomeLojaContext);
+  const{tema,alternarTema} = useContext(TemaContext);
+
 
   return (
-    <header>
-        <h1>{nomeLoja}</h1>
+    <header className="cabecalho">
+      <div className="cabecalho-conteudo">
+
+        <div className="marca">
+          <h1>Gerenciador de Produtos</h1>
+          <p>Utensílios em geral</p>
+        </div>
+
         <Menu/>
+
+        <button 
+          type="button" 
+          className="bota-tema"
+          onClick={alternarTema}
+          aria-label={tema === "light" ? "Tema escuro" : "Tema claro"}>
+          {tema === "light" ? <FaMoon/> : <FaSun/>}
+          {tema === "light" ? "Tema escuro" : "Tema claro"}
+        </button>
+
+      </div>
     </header>
   )
 }
